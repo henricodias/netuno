@@ -24,27 +24,23 @@ df['time'] = pd.to_datetime(df['time'], unit='s')
 
 df['body'] = df['close'] - df['open']
 
-#df['candle'] = np.sign(df['close'] - df['open'])
+df.loc[df['body'] > 0, 'candle'] = 'positivo'
+df.loc[df['body'] < 0, 'candle'] = 'negativo'
+df.loc[df['body'] == 0, 'candle'] = 'neutro'
 
-for i in df:
-    if df['body'][i] > 0:
-        df['candle'] = 'positivo'
-    elif df['body'][i] < 0:
-        df['candle'] = 'negativo'
-    else:
-        df['candle'] = 'neutro'
+for i in df.iterrows():
+    df.loc[df['body'] > 0, 'lowerShadow'] = df['open'] - df['low']
+    df.loc[df['body'] > 0, 'uppperShadow'] = df['high'] - df['close']
+    df.loc[df['body'] < 0, 'lowerShadow'] = df['close'] - df['low']
+    df.loc[df['body'] < 0, 'uppperShadow'] = df['high'] - df['open']
+    df.loc[df['body'] == 0, 'lowerShadow'] = df['close'] - df['low']
+    df.loc[df['body'] == 0, 'uppperShadow'] = df['high'] - df['close']
 
 
-# if (df['body'] > 0):
-#     df['lowerShadow'] = df['open'] - df['low']
-#     df['upperShadow'] = df['high'] - df['close']
-# elif(df['body'] < 0):
-#     df['lowerShadow'] = df['close'] - df['low']
-#     df['upperShadow'] = df['high'] - df['open']
-# else:
-#     df['lowerShadow'] = df['close'] - df['low']
-#     df['upperShadow'] = df['high'] - df['close']
-#
+
+
+
+
 # if(df['body'].iloc[-1] > 0):
 #     if(df['lowerShadow'].iloc[-1] >= (2.5 * df['body'].iloc[-1]) and df['upperShadow'].iloc[-1] < 40):
 #         df['hammer'] = 1
@@ -59,5 +55,5 @@ for i in df:
 #     df['hammer'] = 0
 
 
-
+df.to_excel('cotacao.xlsx', sheet_name='winj22', header=True, index=False)
 print(df)
