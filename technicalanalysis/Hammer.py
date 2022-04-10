@@ -30,30 +30,15 @@ df.loc[df['body'] == 0, 'candle'] = 'neutro'
 
 for i in df.iterrows():
     df.loc[df['body'] > 0, 'lowerShadow'] = df['open'] - df['low']
-    df.loc[df['body'] > 0, 'uppperShadow'] = df['high'] - df['close']
+    df.loc[df['body'] > 0, 'upperShadow'] = df['high'] - df['close']
     df.loc[df['body'] < 0, 'lowerShadow'] = df['close'] - df['low']
-    df.loc[df['body'] < 0, 'uppperShadow'] = df['high'] - df['open']
+    df.loc[df['body'] < 0, 'upperShadow'] = df['high'] - df['open']
     df.loc[df['body'] == 0, 'lowerShadow'] = df['close'] - df['low']
-    df.loc[df['body'] == 0, 'uppperShadow'] = df['high'] - df['close']
+    df.loc[df['body'] == 0, 'upperShadow'] = df['high'] - df['close']
 
-df['hammer'] = np.where(abs(df['lowerShadow']) > abs((2.5 * df['body'])), 1, 0)
+df.loc[(df['upperShadow'] < 40) & (abs(df['body'] > 50)) & (df['lowerShadow'] > 2.5 * abs(df['body'])), 'hammer'] = 1
 
+#print(df)
+df.to_excel('cotacao.xlsx', sheet_name='winj22', header=True, index=False)
 
-
-
-# if(df['body'].iloc[-1] > 0):
-#     if(df['lowerShadow'].iloc[-1] >= (2.5 * df['body'].iloc[-1]) and df['upperShadow'].iloc[-1] < 40):
-#         df['hammer'] = 1
-#     else:
-#         df['hammer'] = 0
-# elif(  df['body'].iloc[-1] < 0):
-#     if (df['lowerShadow'].iloc[-1] >= (2.5 * df['body'].iloc[-1]) and df['upperShadow'].iloc[-1] < 40):
-#         df['hammer'] = 1
-#     else:
-#         df['hammer'] = 0
-# else:
-#     df['hammer'] = 0
-
-
-#df.to_excel('cotacao.xlsx', sheet_name='winj22', header=True, index=False)
 print(df)
