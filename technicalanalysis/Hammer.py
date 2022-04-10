@@ -36,7 +36,7 @@ for i in df.iterrows():
     df.loc[df['body'] == 0, 'lowerShadow'] = df['close'] - df['low']
     df.loc[df['body'] == 0, 'uppperShadow'] = df['high'] - df['close']
 
-
+df['hammer'] = np.where(abs(df['lowerShadow']) > abs((2.5 * df['body'])), 1, 0)
 
 
 
@@ -55,5 +55,5 @@ for i in df.iterrows():
 #     df['hammer'] = 0
 
 
-df.to_excel('cotacao.xlsx', sheet_name='winj22', header=True, index=False)
+#df.to_excel('cotacao.xlsx', sheet_name='winj22', header=True, index=False)
 print(df)
